@@ -7,7 +7,7 @@
 <section id="create" class="layout">
 <div class="panel controls">
 <div class="section-title"><span>01 / BRIEFING</span><span class="muted">NOVA PUBLICAÇÃO</span></div>
-<label for="topic">Prompt / instruções</label><textarea id="topic" rows="5" placeholder="Ex.: Crie um Reel mostrando meu projeto de robótica. Use um tom descontraído, destaque os resultados e termine convidando as pessoas a comentar."></textarea>
+<label for="topic">Prompt / instruções</label><textarea id="topic" rows="5" placeholder="Ex.: Explique como os computadores quânticos podem mudar a tecnologia. Crie um roteiro curto, correto e interessante."></textarea>
 <div class="grid2"><div><label for="format">Formato</label><select id="format"><option value="reel">Reels (9:16)</option><option value="carousel">Carrossel</option><option value="story">Stories</option><option value="post">Post (4:5)</option></select></div><div><label for="duration">Duração do Reel</label><select id="duration"><option value="15">15 segundos</option><option value="30" selected>30 segundos</option><option value="45">45 segundos</option><option value="60">60 segundos</option></select></div></div>
 <div class="grid2"><div><label for="tone">Estilo</label><select id="tone"><option>Dinâmico</option><option>Educativo</option><option>Curioso / viral</option><option>Profissional</option><option>Humorístico</option><option>Storytelling</option></select></div><div><label for="voice">Narração</label><select id="voice"><option>Sem narração</option><option>Texto para narração</option></select></div></div>
 <label>Arquivos da publicação</label><label class="drop" id="dropzone" for="media"><span class="upload-icon">＋</span><b>Arraste imagens e vídeos aqui</b><small>ou clique para selecionar · JPG, PNG, WEBP, MP4, MOV, WEBM</small><input id="media" type="file" accept="image/*,video/*" multiple hidden></label>
@@ -19,7 +19,7 @@
 </div>
 <div class="panel preview">
 <div class="section-title"><span>03 / PRÉVIA DA PUBLICAÇÃO</span><span class="live-dot">● EDITÁVEL</span></div>
-<div class="phone"><div class="video" id="videoCanvas"><div class="video-top">SEU PERFIL <span>•••</span></div><div class="media-stage" id="mediaStage"></div><div class="visual-copy"><small id="sceneLabel">SEU PRÓXIMO POST</small><h2 id="visualTitle">Sua ideia<br>começa aqui.</h2><p id="visualSub">Descreva a publicação e adicione seus arquivos.</p></div><div class="video-bottom"><span>♡　◯　➤</span><span>CONTENT BOT</span></div></div></div>
+<div class="phone"><div class="video" id="videoCanvas"><div class="video-top">OTAMINE STUDIO <span>•••</span></div><div class="media-stage" id="mediaStage"></div><div class="visual-copy"><small id="sceneLabel">SEU PRÓXIMO POST</small><h2 id="visualTitle">Sua ideia<br>começa aqui.</h2><p id="visualSub">Descreva a publicação e adicione seus arquivos.</p></div><div class="video-bottom"><span>♡　◯　➤</span><span>CONTENT BOT</span></div></div></div>
 <div class="export-row"><button id="render" class="primary" disabled>▶ Exportar vídeo com legendas</button><button id="downloadText" class="secondary" disabled>↓ Baixar texto</button></div><div class="actions"><button id="downloadSrt" class="secondary" disabled>↓ Baixar legenda .SRT</button></div><div id="renderStatus" class="hint">A montagem é processada no navegador. Vídeos são exportados em WebM.</div>
 </div></section>
 <section class="panel results" id="results" hidden><div class="section-title"><span>04 / CONTEÚDO GERADO</span><span class="muted">EDITE ANTES DE PUBLICAR</span></div>

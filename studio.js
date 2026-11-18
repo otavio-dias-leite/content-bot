@@ -1,7 +1,7 @@
 // Renderização automática com os assets existentes no repositório.
 (()=> {
  const $=id=>document.getElementById(id);
- let voiceBlob=null,voiceUrl=null;
+ let voiceBlob=null,voiceUrl=null,lastSubtitleCues=[];
  const background=new Image(); background.src=new URL("./fundo.png", import.meta.url).href;
  const thinking=new Image(); thinking.src=new URL("./pensar.png", import.meta.url).href;
  const voiceBtn=$("makeVoice"),renderBtn=$("render");
@@ -15,15 +15,24 @@
  function needsThinking(text){return /pens|imagina|reflit|considere|por que|como isso|será que|mistério|hip[oó]tese|teoria|talvez|poss[ií]vel|entenda/.test((text||"").toLowerCase())}
  function drawCover(ctx,el,x,y,w,h){const iw=el.videoWidth||el.naturalWidth,ih=el.videoHeight||el.naturalHeight;if(!iw||!ih)return;const scale=Math.max(w/iw,h/ih),sw=w/scale,sh=h/scale;ctx.drawImage(el,(iw-sw)/2,(ih-sh)/2,sw,sh,x,y,w,h)}
  function wrap(ctx,text,x,y,max,line){let row="",yy=y;for(const word of String(text).split(/\s+/)){const next=row?row+" "+word:word;if(ctx.measureText(next).width>max&&row){ctx.fillText(row,x,yy);row=word;yy+=line;if(yy>1080)break}else row=next}if(row&&yy<1140)ctx.fillText(row,x,yy)}
+
+ function makeCues(text,duration){
+  const parts=String(text||"").replace(/\\n+/g," ").match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[String(text||"")];
+  const clean=parts.map(s=>s.trim()).filter(Boolean),weights=clean.map(s=>Math.max(1,s.split(/\\s+/).length)),total=weights.reduce((a,b)=>a+b,0);
+  let t=0;return clean.map((s,i)=>{const start=t;t+=duration*weights[i]/total;return {start,end:t,text:s}});
+ }
+ function srtTime(t){const ms=Math.floor((t%1)*1000),sec=Math.floor(t)%60,min=Math.floor(t/60)%60,h=Math.floor(t/3600);return String(h).padStart(2,"0")+":"+String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0")+","+String(ms).padStart(3,"0")}
+ function downloadSrt(cues){const content=cues.map((c,i)=>(i+1)+"\\n"+srtTime(c.start)+" --> "+srtTime(c.end)+"\\n"+c.text).join("\\n\\n");const u=URL.createObjectURL(new Blob([content],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download="legendas-otamine.srt";a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+ const srtBtn=$("downloadSrt");srtBtn?.addEventListener("click",()=>{if(lastSubtitleCues.length)downloadSrt(lastSubtitleCues)});
  function scenes(){return [...document.querySelectorAll("#scenes .scene")].map(x=>({label:x.querySelector("b")?.textContent||"CENA",text:x.querySelector("span")?.textContent||""}))}
  renderBtn?.addEventListener("click",async e=>{e.stopImmediatePropagation();if(!voiceBlob){$("renderStatus").textContent="Gere primeiro a narração IA para montar o vídeo com voz.";return}renderBtn.disabled=true;$("renderStatus").textContent="Montando vídeo com fundo, narração e Otamine…";let mediaEl=null,mediaUrl=null,audioCtx=null;try{const list=scenes();if(!list.length)throw Error("Gere o roteiro primeiro.");if(!background.complete)await new Promise((ok,no)=>{background.onload=ok;background.onerror=no});const canvas=document.createElement("canvas");canvas.width=720;canvas.height=1280;const ctx=canvas.getContext("2d"),stream=canvas.captureStream(30),mime=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(x=>MediaRecorder.isTypeSupported(x));if(!mime)throw Error("Navegador sem suporte a WebM.");audioCtx=new AudioContext();const audioBuffer=await audioCtx.decodeAudioData(await voiceBlob.arrayBuffer()),dest=audioCtx.createMediaStreamDestination(),source=audioCtx.createBufferSource();source.buffer=audioBuffer;source.connect(dest);dest.stream.getAudioTracks().forEach(t=>stream.addTrack(t));const rec=new MediaRecorder(stream,{mimeType:mime}),chunks=[];rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const finished=new Promise(ok=>rec.onstop=()=>ok(new Blob(chunks,{type:mime})));
  const first=$("mediaStage").firstElementChild;if(first?.src){mediaUrl=first.src;if(first.tagName==="IMG"){mediaEl=new Image();mediaEl.src=mediaUrl;await mediaEl.decode()}else{mediaEl=document.createElement("video");mediaEl.src=mediaUrl;mediaEl.muted=true;mediaEl.loop=true;mediaEl.playsInline=true;await new Promise((ok,no)=>{mediaEl.onloadeddata=ok;mediaEl.onerror=no});await mediaEl.play().catch(()=>{})}}
- const duration=Math.min(90,audioBuffer.duration),step=duration/list.length;rec.start();source.start();const start=performance.now();while(performance.now()-start<duration*1000){const elapsed=(performance.now()-start)/1000,index=Math.min(list.length-1,Math.floor(elapsed/step)),scene=list[index],local=(elapsed-index*step)/step;
+ const duration=Math.min(90,audioBuffer.duration),step=duration/list.length,cues=makeCues($("script").value.trim()||list.map(x=>x.text).join(" "),duration);lastSubtitleCues=cues;if(srtBtn)srtBtn.disabled=false;rec.start();source.start();const start=performance.now();while(performance.now()-start<duration*1000){const elapsed=(performance.now()-start)/1000,index=Math.min(list.length-1,Math.floor(elapsed/step)),scene=list[index],local=(elapsed-index*step)/step;
  drawCover(ctx,background,0,0,720,1280);ctx.fillStyle="#080b12a8";ctx.fillRect(0,0,720,1280);
  if(mediaEl){ctx.save();ctx.fillStyle="#090b10";ctx.fillRect(52,170,616,550);ctx.save();ctx.beginPath();ctx.roundRect(52,170,616,550,24);ctx.clip();drawCover(ctx,mediaEl,52,170,616,550);ctx.restore();ctx.strokeStyle="#ff6877";ctx.lineWidth=4;ctx.strokeRect(52,170,616,550);ctx.restore()}
  ctx.fillStyle="#ff8290";ctx.font="bold 22px Arial";ctx.fillText("OTAMINE  /  CIÊNCIA & TECNOLOGIA",42,90);
  if(needsThinking(scene.text)&&thinking.complete&&thinking.naturalWidth){const iw=thinking.naturalWidth,ih=thinking.naturalHeight,w=250,h=w*ih/iw;ctx.drawImage(thinking,430,760,w,h)}
- ctx.fillStyle="#fff";ctx.font="bold 38px Arial";wrap(ctx,scene.text,42,850,636,48);ctx.fillStyle="#ff4d5e";ctx.fillRect(42,1190,636*Math.min(1,local),8);await new Promise(r=>setTimeout(r,33))}
+ const cue=cues.find(c=>elapsed>=c.start&&elapsed<c.end);if(cue){ctx.save();ctx.font="bold 31px Arial";const words=cue.text.split(/\\s+/);let lines=[],line="";for(const word of words){const next=line?line+" "+word:word;if(ctx.measureText(next).width>600&&line){lines.push(line);line=word}else line=next}if(line)lines.push(line);const shown=lines.slice(0,3),boxH=shown.length*39+30,baseY=1110;ctx.fillStyle="#000d";ctx.beginPath();ctx.roundRect(28,baseY-boxH,664,boxH,16);ctx.fill();ctx.fillStyle="#fff";ctx.textAlign="center";shown.forEach((l,i)=>ctx.fillText(l,360,baseY-boxH+42+i*39));ctx.restore()}ctx.fillStyle="#ff4d5e";ctx.fillRect(42,1190,636*Math.min(1,local),8);await new Promise(r=>setTimeout(r,33))}
  rec.stop();const blob=await finished;const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download="otamine-instagram.webm";a.click();setTimeout(()=>URL.revokeObjectURL(u),3000);$("renderStatus").textContent="Vídeo exportado com fundo.png, voz IA e pensar.png nos trechos de reflexão. WebM; converta para MP4 se necessário."
  }catch(err){$("renderStatus").textContent="Falha na montagem: "+err.message}finally{renderBtn.disabled=false;if(audioCtx)await audioCtx.close().catch(()=>{})}},true);
 })();

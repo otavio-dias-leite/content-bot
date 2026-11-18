@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b10"><title>Content Bot — Instagram Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="./"><span class="mark">CB</span><span>CONTENT<span class="muted">BOT</span></span></a><span class="pill">INSTAGRAM STUDIO</span></header>
+<main>
+<section class="intro"><div class="eyebrow">AI CONTENT WORKSPACE</div><h1>Transforme uma ideia<br><span>em conteúdo pronto.</span></h1><p>Crie roteiros, legendas e vídeos verticais para Instagram a partir do tema que você pedir.</p></section>
+<section class="layout">
+<div class="panel controls">
+<div class="section-title"><span>01 / CONFIGURAÇÃO</span><span class="muted">NOVO CONTEÚDO</span></div>
+<label for="topic">O que você quer criar?</label><textarea id="topic" rows="4" placeholder="Ex.: 5 fatos surpreendentes sobre inteligência artificial..."></textarea>
+<div class="grid2"><div><label for="format">Formato</label><select id="format"><option value="reel">Reels (vertical 9:16)</option><option value="carousel">Ideia para carrossel</option><option value="story">Stories</option></select></div><div><label for="duration">Duração</label><select id="duration"><option value="15">15 segundos</option><option value="30" selected>30 segundos</option><option value="45">45 segundos</option><option value="60">60 segundos</option></select></div></div>
+<div class="grid2"><div><label for="tone">Estilo</label><select id="tone"><option>Dinâmico</option><option>Educativo</option><option>Curioso / viral</option><option>Profissional</option><option>Humorístico</option><option>Storytelling</option></select></div><div><label for="voice">Narração</label><select id="voice"><option>Sem narração</option><option>Texto para narração</option></select></div></div>
+<div class="divider"></div><div class="section-title"><span>02 / INTELIGÊNCIA ARTIFICIAL</span><span class="muted">OPCIONAL</span></div>
+<label for="apiKey">Chave Gemini API</label><input id="apiKey" type="password" placeholder="Cole sua chave do Google AI Studio">
+<p class="hint">Sem chave, o modo local gera um roteiro-base. A chave é usada apenas nesta sessão do navegador e não é enviada ao GitHub.</p>
+<div class="actions"><button id="generate" class="primary">✦ Gerar conteúdo</button><button id="clear" class="secondary">Limpar</button></div>
+<div id="status" class="status" aria-live="polite">Pronto para criar.</div>
+</div>
+<div class="panel preview">
+<div class="section-title"><span>03 / PRÉ-VISUALIZAÇÃO</span><span class="live-dot">● EDITÁVEL</span></div>
+<div class="phone"><div class="video" id="videoCanvas"><div class="video-top">SEU PERFIL <span>•••</span></div><div class="visual-copy"><small id="sceneLabel">SEU PRÓXIMO REEL</small><h2 id="visualTitle">Sua ideia<br>começa aqui.</h2><p id="visualSub">Digite um tema e gere seu conteúdo.</p></div><div class="video-bottom"><span>♡　◯　➤</span><span>CONTENT BOT</span></div></div></div>
+<div class="export-row"><button id="render" class="primary" disabled>▶ Renderizar vídeo</button><button id="downloadText" class="secondary" disabled>↓ Baixar roteiro</button></div>
+<div id="renderStatus" class="hint">O vídeo é renderizado no próprio navegador.</div>
+</div>
+</section>
+<section class="panel results" id="results" hidden>
+<div class="section-title"><span>04 / RESULTADO</span><span class="muted">PACOTE PARA INSTAGRAM</span></div>
+<div class="result-grid"><div><label>ROTEIRO</label><textarea id="script" rows="8"></textarea></div><div><label>LEGENDA</label><textarea id="caption" rows="8"></textarea><button id="copyCaption" class="secondary small">Copiar legenda</button></div></div>
+<div><label>HASHTAGS</label><div id="hashtags" class="tags"></div></div>
+<div><label>IDEIAS DE CENAS</label><div id="scenes" class="scene-list"></div></div>
+</section>
+<section class="panel note"><b>Publicação no Instagram</b><p>O GitHub Pages hospeda esta interface, mas não pode guardar com segurança tokens privados nem executar tarefas em segundo plano. Por enquanto, exporte o vídeo e publique pelo Instagram. A publicação automática exige uma API de servidor protegida e uma conta profissional da Meta; não coloque tokens do Instagram nesta página.</p></section>
+</main>
+<footer>CONTENT BOT <span>•</span> GERAÇÃO LOCAL + IA OPCIONAL</footer>
+<script src="app.js"></script>
+</body></html>

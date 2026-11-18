@@ -2,8 +2,8 @@
 (()=> {
  const $=id=>document.getElementById(id);
  let voiceBlob=null,voiceUrl=null;
- const background=new Image(); background.src="fundo.png";
- const thinking=new Image(); thinking.src="pensar.png";
+ const background=new Image(); background.src=new URL("./fundo.png", import.meta.url).href;
+ const thinking=new Image(); thinking.src=new URL("./pensar.png", import.meta.url).href;
  const voiceBtn=$("makeVoice"),renderBtn=$("render");
  const avatarLabel=document.querySelector('label[for="avatarSheet"]');
  if(avatarLabel) avatarLabel.outerHTML='<div class="hint asset-status">Personagem padrão: pensar.png · Fundo padrão: fundo.png. Ambos são carregados automaticamente.</div>';

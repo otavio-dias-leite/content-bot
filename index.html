@@ -1,41 +1,29 @@
 <!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090b10"><title>Content Bot — Instagram Studio</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090b10"><title>Content Bot — Studio</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header class="top"><a class="brand" href="./"><span class="mark">CB</span><span>CONTENT<span class="muted">BOT</span></span></a><span class="pill">INSTAGRAM STUDIO</span></header>
+<header class="top"><a class="brand" href="./"><span class="mark">CB</span><span>CONTENT<span class="muted">BOT</span></span></a><nav><a href="#create">Criar</a><a href="#library">Biblioteca</a></nav><span class="pill">INSTAGRAM STUDIO</span></header>
 <main>
-<section class="intro"><div class="eyebrow">AI CONTENT WORKSPACE</div><h1>Transforme uma ideia<br><span>em conteúdo pronto.</span></h1><p>Crie roteiros, legendas e vídeos verticais para Instagram a partir do tema que você pedir.</p></section>
-<section class="layout">
+<section class="intro"><div class="eyebrow">AI CONTENT WORKSPACE</div><h1>Seu estúdio de<br><span>conteúdo para Instagram.</span></h1><p>Descreva o que deseja, adicione suas imagens e vídeos e monte publicações com roteiro, legenda e mídia em um só lugar.</p></section>
+<section id="create" class="layout">
 <div class="panel controls">
-<div class="section-title"><span>01 / CONFIGURAÇÃO</span><span class="muted">NOVO CONTEÚDO</span></div>
-<label for="topic">O que você quer criar?</label><textarea id="topic" rows="4" placeholder="Ex.: 5 fatos surpreendentes sobre inteligência artificial..."></textarea>
-<div class="grid2"><div><label for="format">Formato</label><select id="format"><option value="reel">Reels (vertical 9:16)</option><option value="carousel">Ideia para carrossel</option><option value="story">Stories</option></select></div><div><label for="duration">Duração</label><select id="duration"><option value="15">15 segundos</option><option value="30" selected>30 segundos</option><option value="45">45 segundos</option><option value="60">60 segundos</option></select></div></div>
+<div class="section-title"><span>01 / BRIEFING</span><span class="muted">NOVA PUBLICAÇÃO</span></div>
+<label for="topic">Prompt / instruções</label><textarea id="topic" rows="5" placeholder="Ex.: Crie um Reel mostrando meu projeto de robótica. Use um tom descontraído, destaque os resultados e termine convidando as pessoas a comentar."></textarea>
+<div class="grid2"><div><label for="format">Formato</label><select id="format"><option value="reel">Reels (9:16)</option><option value="carousel">Carrossel</option><option value="story">Stories</option><option value="post">Post (4:5)</option></select></div><div><label for="duration">Duração do Reel</label><select id="duration"><option value="15">15 segundos</option><option value="30" selected>30 segundos</option><option value="45">45 segundos</option><option value="60">60 segundos</option></select></div></div>
 <div class="grid2"><div><label for="tone">Estilo</label><select id="tone"><option>Dinâmico</option><option>Educativo</option><option>Curioso / viral</option><option>Profissional</option><option>Humorístico</option><option>Storytelling</option></select></div><div><label for="voice">Narração</label><select id="voice"><option>Sem narração</option><option>Texto para narração</option></select></div></div>
-<div class="divider"></div><div class="section-title"><span>02 / INTELIGÊNCIA ARTIFICIAL</span><span class="muted">OPCIONAL</span></div>
+<label>Arquivos da publicação</label><label class="drop" id="dropzone" for="media"><span class="upload-icon">＋</span><b>Arraste imagens e vídeos aqui</b><small>ou clique para selecionar · JPG, PNG, WEBP, MP4, MOV, WEBM</small><input id="media" type="file" accept="image/*,video/*" multiple hidden></label>
+<div id="mediaList" class="media-list"><span class="muted">Nenhum arquivo adicionado.</span></div>
+<div class="divider"></div><div class="section-title"><span>02 / IA</span><span class="muted">GEMINI</span></div>
 <label for="apiKey">Chave Gemini API</label><input id="apiKey" type="password" placeholder="Cole sua chave do Google AI Studio">
-<p class="hint">Sem chave, o modo local gera um roteiro-base. A chave é usada apenas nesta sessão do navegador e não é enviada ao GitHub.</p>
-<div class="actions"><button id="generate" class="primary">✦ Gerar conteúdo</button><button id="clear" class="secondary">Limpar</button></div>
-<div id="status" class="status" aria-live="polite">Pronto para criar.</div>
+<p class="hint">A chave é usada diretamente no navegador e não é armazenada. Para conteúdo com imagens, a IA recebe as imagens selecionadas. Vídeos são incorporados à montagem, mas não são enviados para análise visual automática.</p>
+<div class="actions"><button id="generate" class="primary">✦ Gerar publicação</button><button id="clear" class="secondary">Limpar briefing</button></div><div id="status" class="status" aria-live="polite">Pronto para criar.</div>
 </div>
 <div class="panel preview">
-<div class="section-title"><span>03 / PRÉ-VISUALIZAÇÃO</span><span class="live-dot">● EDITÁVEL</span></div>
-<div class="phone"><div class="video" id="videoCanvas"><div class="video-top">SEU PERFIL <span>•••</span></div><div class="visual-copy"><small id="sceneLabel">SEU PRÓXIMO REEL</small><h2 id="visualTitle">Sua ideia<br>começa aqui.</h2><p id="visualSub">Digite um tema e gere seu conteúdo.</p></div><div class="video-bottom"><span>♡　◯　➤</span><span>CONTENT BOT</span></div></div></div>
-<div class="export-row"><button id="render" class="primary" disabled>▶ Renderizar vídeo</button><button id="downloadText" class="secondary" disabled>↓ Baixar roteiro</button></div>
-<div id="renderStatus" class="hint">O vídeo é renderizado no próprio navegador.</div>
-</div>
-</section>
-<section class="panel results" id="results" hidden>
-<div class="section-title"><span>04 / RESULTADO</span><span class="muted">PACOTE PARA INSTAGRAM</span></div>
-<div class="result-grid"><div><label>ROTEIRO</label><textarea id="script" rows="8"></textarea></div><div><label>LEGENDA</label><textarea id="caption" rows="8"></textarea><button id="copyCaption" class="secondary small">Copiar legenda</button></div></div>
-<div><label>HASHTAGS</label><div id="hashtags" class="tags"></div></div>
-<div><label>IDEIAS DE CENAS</label><div id="scenes" class="scene-list"></div></div>
-</section>
-<section class="panel note"><b>Publicação no Instagram</b><p>O GitHub Pages hospeda esta interface, mas não pode guardar com segurança tokens privados nem executar tarefas em segundo plano. Por enquanto, exporte o vídeo e publique pelo Instagram. A publicação automática exige uma API de servidor protegida e uma conta profissional da Meta; não coloque tokens do Instagram nesta página.</p></section>
-</main>
-<footer>CONTENT BOT <span>•</span> GERAÇÃO LOCAL + IA OPCIONAL</footer>
-<script src="app.js"></script>
-</body></html>
+<div class="section-title"><span>03 / PRÉVIA DA PUBLICAÇÃO</span><span class="live-dot">● EDITÁVEL</span></div>
+<div class="phone"><div class="video" id="videoCanvas"><div class="video-top">SEU PERFIL <span>•••</span></div><div class="media-stage" id="mediaStage"></div><div class="visual-copy"><small id="sceneLabel">SEU PRÓXIMO POST</small><h2 id="visualTitle">Sua ideia<br>começa aqui.</h2><p id="visualSub">Descreva a publicação e adicione seus arquivos.</p></div><div class="video-bottom"><span>♡　◯　➤</span><span>CONTENT BOT</span></div></div></div>
+<div class="export-row"><button id="render" class="primary" disabled>▶ Exportar vídeo</button><button id="downloadText" class="secondary" disabled>↓ Baixar texto</button></div><div id="renderStatus" class="hint">A montagem é processada no navegador. Vídeos são exportados em WebM.</div>
+</div></section>
+<section class="panel results" id="results" hidden><div class="section-title"><span>04 / CONTEÚDO GERADO</span><span class="muted">EDITE ANTES DE PUBLICAR</span></div>
+<div class="result-grid"><div><label>ROTEIRO</label><textarea id="script" rows="9"></textarea></div><div><label>LEGENDA</label><textarea id="caption" rows="9"></textarea><button id="copyCaption" class="secondary small">Copiar legenda</button></div></div><div><label>HASHTAGS</label><div id="hashtags" class="tags"></div></div><div><label>CENAS / SLIDES</label><div id="scenes" class="scene-list"></div></div><div class="actions"><button id="savePost" class="primary">Salvar na biblioteca</button><button id="downloadPackage" class="secondary">Exportar pacote .txt</button></div><div id="saveStatus" class="status"></div></section>
+<section id="library" class="panel library"><div class="section-title"><span>05 / MINHA BIBLIOTECA</span><span class="muted">SALVO NESTE DISPOSITIVO</span></div><p class="hint">Suas publicações salvas ficam neste navegador. Os arquivos não são enviados ao GitHub.</p><div id="libraryList" class="library-list"><p class="muted">Nenhuma publicação salva ainda.</p></div></section>
+<section class="panel note"><b>Sobre a publicação</b><p>Este site cria e organiza o conteúdo e os arquivos no navegador. Ele ainda não publica automaticamente no Instagram. A publicação automática exige integração de servidor com a API oficial da Meta, autenticação e uma conta profissional. Não insira tokens do Instagram nesta página.</p></section>
+</main><footer>CONTENT BOT <span>•</span> INSTAGRAM CONTENT STUDIO</footer><script src="app.js"></script></body></html>

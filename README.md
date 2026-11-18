@@ -19,3 +19,10 @@ GitHub Pages → Settings → Pages → Build and deployment → GitHub Actions.
 - Imagens são enviadas à Gemini quando a chave é informada. Vídeos são incorporados à edição/exportação, mas não são analisados automaticamente pela IA.
 - O renderizador exporta WebM com a primeira mídia como fundo; não é um editor profissional multicamadas.
 - O site não publica no Instagram. Publicação oficial requer backend seguro, OAuth e permissões da Meta; nunca coloque tokens no JavaScript público.
+
+
+## Vídeo com Otamine e voz IA
+- O estúdio inclui narração neural Gemini TTS em português e exportação WebM com áudio incorporado.
+- Envie uma folha 2×2 de expressões do Otamine no campo Avatar; os quadrantes são usados conforme o sentimento do roteiro.
+- O fundo é a primeira mídia da publicação. O roteiro é dividido por cenas e a voz é sincronizada ao longo do vídeo.
+- A voz exige chave Gemini válida e disponibilidade do modelo `gemini-2.5-flash-preview-tts`.
